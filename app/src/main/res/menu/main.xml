@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <item
+            android:title="backward"
+            android:id="@+id/backward"
+            android:icon="@drawable/ic_arrow_back_black_24dp"
+            android:orderInCategory="104"
+            app:showAsAction="never"/>
+        <item
+            android:title="forward"
+            android:icon="@drawable/ic_arrow_forward_black_24dp"
+            android:id="@+id/forward"
+            android:orderInCategory="103"
+            app:showAsAction="never"/>
+
+
+
+
+    <item
+        android:title="Recent tabs"
+        android:id="@+id/tabs"
+        android:orderInCategory="101"
+        app:showAsAction="never"/>
+    <item
+        android:title="Bookmark this"
+        android:id="@+id/bookmarkthis"
+        app:showAsAction="always"
+        android:icon="@drawable/ic_bookmark_black_24dp"/>
+    <item
+        android:title="Show Bookmarks"
+        android:id="@+id/showbookmarks"
+        android:orderInCategory="106"
+        app:showAsAction="never"/>
+
+    <item
+        android:title="Refresh"
+        android:id="@+id/refresh"
+        android:orderInCategory="102"
+        app:showAsAction="never"/>
+    <item
+        android:title="History"
+        android:id="@+id/history"
+        android:orderInCategory="105"
+        app:showAsAction="never"/>
+    <item
+        android:title="New Tab"
+        android:id="@+id/newtab"
+        android:icon="@drawable/ic_add_circle_outline_black_24dp"
+        app:showAsAction="always"/>
+    <item
+        android:title="Settings"
+        android:id="@+id/settings"
+        android:orderInCategory="108"
+        app:showAsAction="never"/>
+    <item
+        android:title="Share url"
+        android:id="@+id/shareurl"
+        android:orderInCategory="106"
+        app:showAsAction="never"/>
+    <item
+        android:title="Scan QR Code"
+        android:id="@+id/scan"
+        android:orderInCategory="107"
+        app:showAsAction="never"/>
+    <item
+        android:title="Exit"
+        android:id="@+id/exit"
+        android:orderInCategory="109"
+        app:showAsAction="never"/>
+
+
+
+</menu>
