@@ -1,6 +1,5 @@
 package com.example.shrutijagwani.browser;
 
-import android.app.Activity;
 import android.app.DownloadManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -8,7 +7,6 @@ import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -47,9 +45,7 @@ public class MainActivity extends AppCompatActivity {
         setReferences();
         pbar.setMax(100);
         configureWebView();
-        if (getIntent().getStringExtra("url") != null) {
-            mywebview.loadUrl(getIntent().getStringExtra("url"));
-        }
+        checkIntent();
         mainlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -66,6 +62,15 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    private void checkIntent() {
+        if (getIntent() != null &&
+                Intent.ACTION_VIEW.equals(getIntent().getAction()) &&
+                getIntent().getData() != null) {
+            myurl.setText(getIntent().getData().toString());
+            mywebview.loadUrl(getIntent().getData().toString());
+        }
     }
 
     private void configureWebView() {
