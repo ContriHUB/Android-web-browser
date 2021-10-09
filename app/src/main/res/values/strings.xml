@@ -4,4 +4,6 @@
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="hint"><i>website.com</i></string>
+    <string name="setting"><i>Setting</i></string>
+    <string name="save_history">Save History</string>
 </resources>

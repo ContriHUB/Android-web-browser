@@ -2,6 +2,7 @@ package com.example.shrutijagwani.browser;
 
 import android.app.DownloadManager;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -37,6 +38,9 @@ public class MainActivity extends AppCompatActivity {
     private MyDbHandler dbHandler;
     private myDbHandlerBook dbHandlerbook;
     private String mycurrenturl;
+    private boolean saveHistory = true;
+    public static final String SETTING_PREFERENCE = "com.example.shrutijagwani.browser.setting";
+    public static final String SETTING_SAVE_HISTORY = "SETTING_SAVE_HISTORY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,6 +167,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.settings:
+                Intent intent = new Intent(this, SettingActivity.class);
+                startActivity(intent);
+                break;
             case R.id.backward:
                 onBackPressed();
                 break;
@@ -263,7 +271,8 @@ public class MainActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         if (imm != null)
             imm.hideSoftInputFromWindow(myurl.getWindowToken(), 0);
-        savedata();
+        if (saveHistory)
+            savedata();
     }
 
     public void savedata() {
@@ -281,5 +290,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         mywebview.restoreState(savedInstanceState);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences sharedPreferences = getSharedPreferences(SETTING_PREFERENCE, MODE_PRIVATE);
+        saveHistory = sharedPreferences.getBoolean(SETTING_SAVE_HISTORY, true);
     }
 }
