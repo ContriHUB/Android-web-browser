@@ -45,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
         setReferences();
         pbar.setMax(100);
         configureWebView();
-        checkIntent();
         mainlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -62,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+        checkIntent();
     }
 
     private void checkIntent() {
@@ -69,16 +69,18 @@ public class MainActivity extends AppCompatActivity {
                 Intent.ACTION_VIEW.equals(getIntent().getAction()) &&
                 getIntent().getData() != null) {
             myurl.setText(getIntent().getData().toString());
-            mywebview.loadUrl(getIntent().getData().toString());
+            openUrl();
         }
     }
 
     private void configureWebView() {
         mywebview.getSettings().setJavaScriptEnabled(true);
+
         mywebview.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 mylayout.setVisibility(View.VISIBLE);
+                myurl.setText(url);
                 super.onPageStarted(view, url, favicon);
             }
 
@@ -95,21 +97,17 @@ public class MainActivity extends AppCompatActivity {
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
                 pbar.setProgress(newProgress);
-
             }
 
             @Override
             public void onReceivedTitle(WebView view, String title) {
                 super.onReceivedTitle(view, title);
                 getSupportActionBar().setTitle(title);
-
             }
 
             @Override
             public void onReceivedIcon(WebView view, Bitmap icon) {
-
                 super.onReceivedIcon(view, icon);
-
             }
 
         });
@@ -260,17 +258,16 @@ public class MainActivity extends AppCompatActivity {
         if (myurl.getText().toString().equals("")) {
             return;
         }
-        String website = "https://www.";
-        website += myurl.getText().toString();
+        String website = myurl.getText().toString();
         mywebview.loadUrl(website);
-        InputMethodManager imm = (InputMethodManager) getSystemService(getApplicationContext().INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(myurl.getWindowToken(), 0);
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        if (imm != null)
+            imm.hideSoftInputFromWindow(myurl.getWindowToken(), 0);
         savedata();
     }
 
     public void savedata() {
         Websites web = new Websites(mywebview.getUrl());
         dbHandler.addUrl(web);
-
     }
 }
