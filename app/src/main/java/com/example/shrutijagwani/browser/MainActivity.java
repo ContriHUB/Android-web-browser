@@ -270,4 +270,16 @@ public class MainActivity extends AppCompatActivity {
         Websites web = new Websites(mywebview.getUrl());
         dbHandler.addUrl(web);
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mywebview.saveState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        mywebview.restoreState(savedInstanceState);
+    }
 }
