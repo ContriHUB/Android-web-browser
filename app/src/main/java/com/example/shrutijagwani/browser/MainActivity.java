@@ -1,6 +1,8 @@
 package com.example.shrutijagwani.browser;
 
+import android.app.AlertDialog;
 import android.app.DownloadManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
@@ -53,8 +55,10 @@ public class MainActivity extends AppCompatActivity {
     private myDbHandlerBook dbHandlerbook;
     private String mycurrenturl;
     private boolean saveHistory = true;
+    private boolean confirmExit = true;
     public static final String SETTING_PREFERENCE = "com.example.shrutijagwani.browser.setting";
     public static final String SETTING_SAVE_HISTORY = "SETTING_SAVE_HISTORY";
+    public static final String SETTING_CONFIRM_EXIT = "SETTING_CONFIRM_EXIT";
     public static final List<WebView> webViews = new ArrayList<>();
     private List<String> books;
 
@@ -169,12 +173,34 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (currentWebView.canGoBack()) {
+        if (currentWebView != null && currentWebView.canGoBack()) {
             currentWebView.goBack();
             savedata();
         } else {
-            finish();
+            if (confirmExit)
+                confirmExit();
+            else
+                finish();
         }
+    }
+
+    private void confirmExit() {
+        AlertDialog alertDialog = new AlertDialog.Builder(this)
+                .setTitle("Exit app?")
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .create();
+        alertDialog.show();
     }
 
     @Override
@@ -242,7 +268,10 @@ public class MainActivity extends AppCompatActivity {
                 scan();
                 break;
             case R.id.exit:
-                finish();
+                if (confirmExit)
+                    confirmExit();
+                else
+                    finish();
 
         }
         return true;
@@ -379,6 +408,7 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         SharedPreferences sharedPreferences = getSharedPreferences(SETTING_PREFERENCE, MODE_PRIVATE);
         saveHistory = sharedPreferences.getBoolean(SETTING_SAVE_HISTORY, true);
+        confirmExit = sharedPreferences.getBoolean(SETTING_CONFIRM_EXIT, true);
         if (webViews.size() > 0) {
             boolean deleted = true;
             for (WebView w : webViews) {
