@@ -8,6 +8,11 @@ import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.view.menu.ActionMenuItem;
+import android.support.v7.view.menu.ActionMenuItemView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +30,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.TextView;
 
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean saveHistory = true;
     public static final String SETTING_PREFERENCE = "com.example.shrutijagwani.browser.setting";
     public static final String SETTING_SAVE_HISTORY = "SETTING_SAVE_HISTORY";
+    private List<String> books;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -133,6 +141,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
 
     private void setReferences() {
@@ -160,6 +170,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.bookmarkthis);
+
+        if(mywebview.getUrl()==null) {
+            item.setIcon(R.drawable.ic_bookmark_grey_24dp);
+        }else if(!isBookMark(new Websites(mywebview.getUrl()))){
+          item.setIcon(R.drawable.ic_bookmark_yellow_24dp);
+        } else{
+            item.setIcon(R.drawable.ic_bookmark_black_24dp);
+            item.setEnabled(true);
+        }
+
         return true;
     }
 
@@ -226,8 +252,37 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onBookPressed() {
+        if(mywebview.getUrl()==null){
+            return;
+        }
+        insertBookmark();
+        invalidateOptionsMenu();
+    }
+
+    private void insertBookmark() {
+
         Websites web = new Websites(mywebview.getUrl());
-        dbHandlerbook.addUrl(web);
+
+        if(isBookMark(web)) {
+            dbHandlerbook.addUrl(web);
+        }
+
+    }
+
+    private boolean isBookMark(Websites web) {
+        books=dbHandlerbook.databaseToString();
+        String bookMark = web.get_url();
+
+        int counter=0;
+        for(int i=0;i<books.size();i++) {
+            if(bookMark.equals(books.get(i))){
+                counter++;
+            }
+        }
+        if(counter==0)
+            return true;
+        else
+            return false;
     }
 
     public void onNewTabPressed() {
