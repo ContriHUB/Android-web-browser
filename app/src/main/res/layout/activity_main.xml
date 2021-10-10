@@ -1,68 +1,85 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/mainlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
+    android:background="@drawable/background">
 
-    <LinearLayout
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/mainlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:context=".MainActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/myet"
-                android:layout_width="0dp"
-                android:layout_height="50dp"
-                android:layout_weight="3"
-                android:hint="@string/hint"
-                android:imeOptions="actionGo"
-                android:inputType="textUri"
-                android:maxLines="1"
-                android:textColor="#FFFFFF"
-                android:textColorHint="#FFFFF0" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
 
-            <Button
-                android:id="@+id/mybtn"
+                <EditText
+                    android:id="@+id/myet"
+                    android:layout_width="0dp"
+                    android:layout_height="50dp"
+                    android:layout_weight="3"
+                    android:hint="@string/hint"
+                    android:imeOptions="actionGo"
+                    android:inputType="textUri"
+                    android:maxLines="1"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#FFFFF0" />
+
+                <Button
+                    android:id="@+id/mybtn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:onClick="goto1"
+                    android:text="Go!" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:onClick="goto1"
-                android:text="Go!" />
+                android:layout_height="wrap_content">
 
+                <ProgressBar
+                    android:id="@+id/progressbar"
+                    style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="10dp" />
+
+            </LinearLayout>
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <FrameLayout
+                    android:id="@+id/frame"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </android.support.v4.widget.NestedScrollView>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-            <ProgressBar
-                android:id="@+id/progressbar"
-                style="@style/Base.Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="10dp" />
-        </LinearLayout>
+    <TextView
+        android:id="@+id/no_tab"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/hi_user_nwhat_about_surfing_stuff"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-        <android.support.v4.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <WebView
-                android:id="@+id/webview"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"></WebView>
-
-        </android.support.v4.widget.NestedScrollView>
-    </LinearLayout>
-
-
-</android.support.v4.widget.SwipeRefreshLayout>
+</android.support.constraint.ConstraintLayout>

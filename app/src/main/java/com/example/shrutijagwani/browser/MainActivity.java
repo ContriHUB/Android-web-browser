@@ -20,20 +20,29 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String CURRENT = "CURRENT";
+    private static final int RECENT_TAB_REQUEST = 1;
+    private int currentIndex = -1;
     private ProgressBar pbar;
-    private WebView mywebview;
+    private WebView currentWebView;
     private EditText myurl;
     private Button mybutton;
     private LinearLayout mylayout;
     private SwipeRefreshLayout mainlayout;
+    private TextView noTab;
+    private FrameLayout frameLayout;
     private Intent intent;
     private MyDbHandler dbHandler;
     private myDbHandlerBook dbHandlerbook;
@@ -41,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean saveHistory = true;
     public static final String SETTING_PREFERENCE = "com.example.shrutijagwani.browser.setting";
     public static final String SETTING_SAVE_HISTORY = "SETTING_SAVE_HISTORY";
+    public static final List<WebView> webViews = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,39 +58,55 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         setReferences();
         pbar.setMax(100);
-        configureWebView();
         mainlayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                mywebview.reload();
-
+                currentWebView.reload();
             }
         });
         myurl.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int i, KeyEvent keyEvent) {
                 if (i == EditorInfo.IME_ACTION_GO) {
-                    openUrl();
+                    openUrl(myurl.getText().toString());
                 }
                 return false;
             }
         });
-        checkIntent();
+        checkIntent(getIntent());
     }
 
-    private void checkIntent() {
-        if (getIntent() != null &&
-                Intent.ACTION_VIEW.equals(getIntent().getAction()) &&
-                getIntent().getData() != null) {
-            myurl.setText(getIntent().getData().toString());
-            openUrl();
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        checkIntent(intent);
+    }
+
+    private void setReferences() {
+        noTab = findViewById(R.id.no_tab);
+        pbar = findViewById(R.id.progressbar);
+        frameLayout = findViewById(R.id.frame);
+        myurl = findViewById(R.id.myet);
+        mybutton = findViewById(R.id.mybtn);
+        mylayout = findViewById(R.id.linearLayout);
+        mainlayout = findViewById(R.id.mainlayout);
+        dbHandler = new MyDbHandler(this, null, null, 1);
+        dbHandlerbook = new myDbHandlerBook(this, null, null, 1);
+    }
+
+    private void checkIntent(Intent intent) {
+        if (intent != null &&
+                Intent.ACTION_VIEW.equals(intent.getAction()) &&
+                intent.getData() != null) {
+            onNewTabPressed();
+            myurl.setText(intent.getData().toString());
+            openUrl(intent.getData().toString());
         }
     }
 
-    private void configureWebView() {
-        mywebview.getSettings().setJavaScriptEnabled(true);
-
-        mywebview.setWebViewClient(new WebViewClient() {
+    private void configureWebView(WebView webView) {
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(new WebViewClient() {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 mylayout.setVisibility(View.VISIBLE);
@@ -96,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
                 mycurrenturl = url;
             }
         });
-        mywebview.setWebChromeClient(new WebChromeClient() {
+        webView.setWebChromeClient(new WebChromeClient() {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 super.onProgressChanged(view, newProgress);
@@ -115,9 +141,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
-
-
-        mywebview.setDownloadListener(new DownloadListener() {
+        webView.setDownloadListener(new DownloadListener() {
             @Override
             public void onDownloadStart(String url, String userAgent, String contentDisposition, String mimetype, long contentLength) {
 
@@ -135,22 +159,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void setReferences() {
-        pbar = findViewById(R.id.progressbar);
-        mywebview = findViewById(R.id.webview);
-        myurl = findViewById(R.id.myet);
-        mybutton = findViewById(R.id.mybtn);
-        mylayout = findViewById(R.id.linearLayout);
-        mainlayout = findViewById(R.id.mainlayout);
-        dbHandler = new MyDbHandler(this, null, null, 1);
-        dbHandlerbook = new myDbHandlerBook(this, null, null, 1);
-    }
-
-
     @Override
     public void onBackPressed() {
-        if (mywebview.canGoBack()) {
-            mywebview.goBack();
+        if (currentWebView.canGoBack()) {
+            currentWebView.goBack();
             savedata();
         } else {
             finish();
@@ -222,22 +234,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onRecenttabsPressed() {
-
+        Intent intent = new Intent(this, RecentTabsActivity.class);
+        intent.putExtra(CURRENT, currentIndex);
+        startActivityForResult(intent, RECENT_TAB_REQUEST);
     }
 
     private void onBookPressed() {
-        Websites web = new Websites(mywebview.getUrl());
+        Websites web = new Websites(currentWebView.getUrl());
         dbHandlerbook.addUrl(web);
     }
 
     public void onNewTabPressed() {
-        //Intent intent=new Intent(getApplicationContext(),newtab.class);
-        //startActivity(intent);
+        mainlayout.setVisibility(View.VISIBLE);
+        noTab.setVisibility(View.GONE);
+        WebView webView = new WebView(this);
+        configureWebView(webView);
+        webViews.add(webView);
+        frameLayout.removeAllViews();
+        frameLayout.addView(webView);
+        currentWebView = webView;
+        currentIndex = webViews.size() - 1;
+        myurl.setText("");
     }
 
     public void onForwardPressed() {
-        if (mywebview.canGoForward()) {
-            mywebview.goForward();
+        if (currentWebView.canGoForward()) {
+            currentWebView.goForward();
             savedata();
         } else {
             Toast.makeText(this, "Cannot Go Forward", Toast.LENGTH_SHORT).show();
@@ -255,19 +277,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onRefreshPressed() {
-        mywebview.reload();
+        currentWebView.reload();
     }
 
     public void goto1(View view) {
-        openUrl();
+        openUrl(myurl.getText().toString());
     }
 
-    private void openUrl() {
+    private void openUrl(String website) {
         if (myurl.getText().toString().equals("")) {
             return;
         }
-        String website = myurl.getText().toString();
-        mywebview.loadUrl(website);
+        currentWebView.loadUrl(website);
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         if (imm != null)
             imm.hideSoftInputFromWindow(myurl.getWindowToken(), 0);
@@ -276,20 +297,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void savedata() {
-        Websites web = new Websites(mywebview.getUrl());
+        Websites web = new Websites(currentWebView.getUrl());
         dbHandler.addUrl(web);
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mywebview.saveState(outState);
+        if (currentWebView != null)
+            currentWebView.saveState(outState);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        mywebview.restoreState(savedInstanceState);
+        if (currentWebView != null)
+            currentWebView.restoreState(savedInstanceState);
     }
 
     @Override
@@ -297,5 +320,46 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         SharedPreferences sharedPreferences = getSharedPreferences(SETTING_PREFERENCE, MODE_PRIVATE);
         saveHistory = sharedPreferences.getBoolean(SETTING_SAVE_HISTORY, true);
+        if (webViews.size() > 0) {
+            boolean deleted = true;
+            for (WebView w : webViews) {
+                if (w.equals(currentWebView)) {
+                    deleted = false;
+                    break;
+                }
+            }
+            if (deleted) {
+                frameLayout.removeAllViews();
+                currentWebView = webViews.get(0);
+                frameLayout.addView(currentWebView);
+                currentIndex = 0;
+                myurl.setText(currentWebView.getUrl());
+            }
+        } else {
+            frameLayout.removeAllViews();
+            mainlayout.setVisibility(View.GONE);
+            noTab.setVisibility(View.VISIBLE);
+            myurl.setText("");
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RECENT_TAB_REQUEST && resultCode == RESULT_OK) {
+            frameLayout.removeAllViews();
+            if (webViews.size() > 0) {
+                currentIndex = data.getIntExtra(CURRENT, 0);
+                WebView webView = webViews.get(data.getIntExtra(CURRENT, 0));
+                currentWebView = webView;
+                frameLayout.addView(currentWebView);
+                myurl.setText(currentWebView.getUrl());
+            } else {
+                frameLayout.removeAllViews();
+                mainlayout.setVisibility(View.GONE);
+                noTab.setVisibility(View.VISIBLE);
+                myurl.setText("");
+            }
+        }
     }
 }
