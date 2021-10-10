@@ -4,7 +4,9 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.2962962962962963" />
+        <entry key="app/src/main/res/drawable/ic_baseline_history_24.xml" value="0.29259259259259257" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3734375" />
+        <entry key="app/src/main/res/layout/activity_setting.xml" value="0.3026041666666667" />
         <entry key="app/src/main/res/menu/main.xml" value="0.3734375" />
         <entry key="app/src/main/res/menu/menu_tab.xml" value="0.3734375" />
       </map>
@@ -54,7 +56,7 @@
       </value>
     </option>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">
