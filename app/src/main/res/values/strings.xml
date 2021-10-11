@@ -6,4 +6,7 @@
     <string name="hint"><i>website.com</i></string>
     <string name="setting"><i>Setting</i></string>
     <string name="save_history">Save History</string>
+    <string name="hi_user_nwhat_about_surfing_stuff">Hi, User!\nWhat about surfing stuff?</string>
+    <string name="new_tab">New Tab</string>
+    <string name="confirm_exit">Confirm exit</string>
 </resources>

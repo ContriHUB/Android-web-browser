@@ -23,75 +23,74 @@ import static android.Manifest.permission.CAMERA;
 public class ReaderActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
 
-    private static final int REQUEST_CAMERA=1;
+    private static final int REQUEST_CAMERA = 1;
     private ZXingScannerView scannerView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        scannerView=new ZXingScannerView(this);
+        scannerView = new ZXingScannerView(this);
         setContentView(scannerView);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(checPermission()){
-                Toast.makeText(this,"Permission granted",Toast.LENGTH_SHORT).show();
-            }
-            else
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checPermission()) {
+                Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+            } else
                 requestPermission();
         }
 
 
     }
-    private boolean checPermission(){
-        return (ContextCompat.checkSelfPermission(this, CAMERA)== PackageManager.PERMISSION_GRANTED);
+
+    private boolean checPermission() {
+        return (ContextCompat.checkSelfPermission(this, CAMERA) == PackageManager.PERMISSION_GRANTED);
     }
 
-    private void requestPermission()
-    {
-        ActivityCompat.requestPermissions(this,new String[]{CAMERA},REQUEST_CAMERA);
+    private void requestPermission() {
+        ActivityCompat.requestPermissions(this, new String[]{CAMERA}, REQUEST_CAMERA);
     }
 
-    public void onRequestPermissionsResult(int requestCode,String permissions[],int grantResults[]){
-        switch (requestCode){
-            case REQUEST_CAMERA:if(grantResults.length>0){
-                boolean cameraAccepted=grantResults[0]==PackageManager.PERMISSION_GRANTED;
-                if(cameraAccepted){
-                    Toast.makeText(this,"Permission granted",Toast.LENGTH_SHORT).show();
-                }
-                else {
-                    Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
-                    if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.M){
-                        if(shouldShowRequestPermissionRationale(CAMERA)){
-                            displayAlertMessage("You need to allow access for both permissions", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    requestPermissions(new String[]{CAMERA},REQUEST_CAMERA);
-                                }
-                            });
-                            return;
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int grantResults[]) {
+        switch (requestCode) {
+            case REQUEST_CAMERA:
+                if (grantResults.length > 0) {
+                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
+                    if (cameraAccepted) {
+                        Toast.makeText(this, "Permission granted", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(this, "Permission denied", Toast.LENGTH_SHORT).show();
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (shouldShowRequestPermissionRationale(CAMERA)) {
+                                displayAlertMessage("You need to allow access for both permissions", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        requestPermissions(new String[]{CAMERA}, REQUEST_CAMERA);
+                                    }
+                                });
+                                return;
+                            }
                         }
+
+
                     }
-
-
                 }
-            }
-            break;
+                break;
         }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if(Build.VERSION.SDK_INT >=Build.VERSION_CODES.M) {
-            if(checPermission()){
-            if (scannerView == null) {
-                new ZXingScannerView(this);
-                setContentView(scannerView);
-            }
-            scannerView.setResultHandler(this);
-            scannerView.startCamera();
-        }
-            else
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checPermission()) {
+                if (scannerView == null) {
+                    new ZXingScannerView(this);
+                    setContentView(scannerView);
+                }
+                scannerView.setResultHandler(this);
+                scannerView.startCamera();
+            } else
                 requestPermission();
         }
     }
@@ -102,14 +101,14 @@ public class ReaderActivity extends AppCompatActivity implements ZXingScannerVie
         scannerView.stopCamera();
     }
 
-    public void displayAlertMessage(String message, DialogInterface.OnClickListener listener){
-        new AlertDialog.Builder(this).setMessage(message).setPositiveButton("OK",listener).setNegativeButton("CANCEL",null).create().show();
+    public void displayAlertMessage(String message, DialogInterface.OnClickListener listener) {
+        new AlertDialog.Builder(this).setMessage(message).setPositiveButton("OK", listener).setNegativeButton("CANCEL", null).create().show();
     }
 
     @Override
     public void handleResult(final Result result) {
-        final String scanResult=result.getText();
-        AlertDialog.Builder builder=new AlertDialog.Builder(this);
+        final String scanResult = result.getText();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Scan Result");
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -127,16 +126,16 @@ public class ReaderActivity extends AppCompatActivity implements ZXingScannerVie
                 //Intent x=new Intent(Intent.ACTION_VIEW,Uri.parse(scanResult));
                 //startActivity(x);
 
-                String url=scanResult;
-                Intent intent = new Intent(ReaderActivity.this,MainActivity.class);
-                intent.putExtra("url",url);
+                String url = scanResult;
+                Intent intent = new Intent(ReaderActivity.this, MainActivity.class);
+                intent.putExtra("url", url);
                 startActivity(intent);
                 finish();
 
             }
         });
         builder.setMessage(scanResult);
-        AlertDialog alert=builder.create();
+        AlertDialog alert = builder.create();
         alert.show();
     }
 }

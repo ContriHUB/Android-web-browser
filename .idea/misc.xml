@@ -10,8 +10,11 @@
         <entry key="..\:/Users/gargg/Desktop/contriHub/d/Android-web-browser/app/src/main/res/layout/activity_main.xml" value="0.27447916666666666" />
         <entry key="..\:/Users/gargg/Desktop/contriHub/d/Android-web-browser/app/src/main/res/menu/main.xml" value="0.27447916666666666" />
         <entry key="app/src/main/res/drawable/ic_baseline_history_24.xml" value="0.29259259259259257" />
+        <entry key="app/src/main/res/drawable/ic_baseline_tab_24.xml" value="0.1390625" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3734375" />
+        <entry key="app/src/main/res/layout/activity_recent_tabs.xml" value="0.28442028985507245" />
         <entry key="app/src/main/res/layout/activity_setting.xml" value="0.3026041666666667" />
+        <entry key="app/src/main/res/layout/recent_tab.xml" value="0.28442028985507245" />
         <entry key="app/src/main/res/menu/main.xml" value="0.3734375" />
         <entry key="app/src/main/res/menu/menu_tab.xml" value="0.3734375" />
       </map>

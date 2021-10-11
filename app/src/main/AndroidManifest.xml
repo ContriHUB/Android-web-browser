@@ -18,11 +18,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".RecentTabsActivity"
+            android:exported="true"
+            android:label="Recent Tabs"/>
+        <activity
             android:name=".SettingActivity"
             android:exported="true"
-            android:label="@string/setting"/>
+            android:label="@string/setting" />
         <activity
             android:name=".MainActivity"
+            android:launchMode="singleInstance"
             android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
