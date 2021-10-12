@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="file:$USER_HOME$/Android/Sdk/icons/material/materialicons/exit_to_app/baseline_exit_to_app_24.xml" />
+                                      <entry key="url" value="file:$USER_HOME$/Android/Sdk/icons/material/materialicons/privacy_tip/baseline_privacy_tip_24.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_baseline_exit_to_app_24" />
+                            <entry key="outputName" value="ic_baseline_privacy_tip_24" />
                             <entry key="sourceFile" value="$USER_HOME$/C:\Users\Shruti Jagwani" />
                           </map>
                         </option>

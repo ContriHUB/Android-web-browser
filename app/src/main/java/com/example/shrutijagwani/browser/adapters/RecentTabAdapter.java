@@ -2,6 +2,7 @@ package com.example.shrutijagwani.browser.adapters;
 
 import static android.app.Activity.RESULT_OK;
 import static com.example.shrutijagwani.browser.MainActivity.CURRENT;
+import static com.example.shrutijagwani.browser.MainActivity.incognitos;
 import static com.example.shrutijagwani.browser.MainActivity.webViews;
 
 import android.app.Activity;
@@ -90,6 +91,13 @@ public class RecentTabAdapter extends RecyclerView.Adapter<RecentTabAdapter.Cust
                 url.setText(webView.getUrl());
             else
                 url.setText(context.getString(R.string.new_tab));
+            if (incognitos.contains(webView)) {
+                url.setCompoundDrawablesWithIntrinsicBounds(context.getResources().getDrawable(R.drawable.ic_baseline_privacy_tip_24, null), null, null, null);
+                url.setCompoundDrawablePadding(10);
+            } else {
+                url.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+                url.setCompoundDrawablePadding(0);
+            }
             if (webView.getTitle() != null && !webView.getTitle().equals(""))
                 title.setText(webView.getTitle());
             else
