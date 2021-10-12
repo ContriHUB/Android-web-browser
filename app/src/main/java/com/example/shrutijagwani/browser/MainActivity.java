@@ -21,8 +21,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Button;
@@ -34,7 +36,9 @@ import android.widget.Toast;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -61,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
     public static final String SETTING_CONFIRM_EXIT = "SETTING_CONFIRM_EXIT";
     public static final List<WebView> webViews = new ArrayList<>();
     private List<String> books;
+    public static final Set<WebView> incognitos = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -233,6 +238,9 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         switch (id) {
+            case R.id.incognito:
+                onNewIncognitoPressed();
+                break;
             case R.id.settings:
                 Intent intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
@@ -275,6 +283,31 @@ public class MainActivity extends AppCompatActivity {
 
         }
         return true;
+    }
+
+    private void configureIncognitoTab(WebView myWebView) {
+        myWebView.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);
+        myWebView.getSettings().setAppCacheEnabled(false);
+        myWebView.clearHistory();
+        myWebView.clearCache(true);
+        myWebView.clearFormData();
+        myWebView.getSettings().setSaveFormData(false);
+    }
+
+    private void onNewIncognitoPressed() {
+        mainlayout.setVisibility(View.VISIBLE);
+        noTab.setVisibility(View.GONE);
+        WebView webView = new WebView(this);
+        configureWebView(webView);
+        configureIncognitoTab(webView);
+        webViews.add(webView);
+        incognitos.add(webView);
+        frameLayout.removeAllViews();
+        frameLayout.addView(webView);
+        currentWebView = webView;
+        checkIncognito();
+        currentIndex = webViews.size() - 1;
+        myurl.setText("");
     }
 
     public void scan() {
@@ -341,6 +374,7 @@ public class MainActivity extends AppCompatActivity {
         frameLayout.removeAllViews();
         frameLayout.addView(webView);
         currentWebView = webView;
+        checkIncognito();
         currentIndex = webViews.size() - 1;
         myurl.setText("");
     }
@@ -380,7 +414,7 @@ public class MainActivity extends AppCompatActivity {
         InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         if (imm != null)
             imm.hideSoftInputFromWindow(myurl.getWindowToken(), 0);
-        if (saveHistory)
+        if (saveHistory && !incognitos.contains(currentWebView))
             savedata();
     }
 
@@ -420,6 +454,7 @@ public class MainActivity extends AppCompatActivity {
             if (deleted) {
                 frameLayout.removeAllViews();
                 currentWebView = webViews.get(0);
+                checkIncognito();
                 frameLayout.addView(currentWebView);
                 currentIndex = 0;
                 myurl.setText(currentWebView.getUrl());
@@ -432,6 +467,16 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void checkIncognito() {
+        if (incognitos.contains(currentWebView)) {
+            myurl.setCompoundDrawablesWithIntrinsicBounds(getResources().getDrawable(R.drawable.ic_baseline_privacy_tip_24, null), null, null, null);
+            myurl.setCompoundDrawablePadding(10);
+        } else {
+            myurl.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            myurl.setCompoundDrawablePadding(0);
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -441,6 +486,7 @@ public class MainActivity extends AppCompatActivity {
                 currentIndex = data.getIntExtra(CURRENT, 0);
                 WebView webView = webViews.get(data.getIntExtra(CURRENT, 0));
                 currentWebView = webView;
+                checkIncognito();
                 frameLayout.addView(currentWebView);
                 myurl.setText(currentWebView.getUrl());
             } else {
