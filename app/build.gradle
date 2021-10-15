@@ -1,11 +1,12 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 27
+    compileSdkVersion 31
+    buildToolsVersion "30.0.3"
     defaultConfig {
         applicationId "com.example.shrutijagwani.browser"
         minSdkVersion 23
-        targetSdkVersion 27
+        targetSdkVersion 31
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
