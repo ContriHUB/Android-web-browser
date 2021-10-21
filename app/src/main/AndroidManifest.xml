@@ -46,7 +46,8 @@
                 <data android:scheme="javascript" />
             </intent-filter>
         </activity>
-        <activity android:name=".history" />
+        <activity android:name=".history"
+            android:label="History"/>
         <activity android:name=".bookmarks" />
 
         <meta-data
