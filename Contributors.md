@@ -6,4 +6,4 @@
 4. [Gursimran Kaur Saini](https://github.com/gursimran18)
 5. [Priyanshu Gupta](https://github.com/wsLord)
 6. [Vishwas Vaish](https://github.com/VVV007)
-7. [Naman Mittal](https://contrihub21.herokuapp.com/profile/user/just-a-n00b/)
+7. [Naman Mittal](https://github.com/just-a-n00b)
