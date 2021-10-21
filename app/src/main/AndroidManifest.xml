@@ -47,7 +47,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".history" />
-        <activity android:name=".bookmarks" />
+        <activity android:name=".bookmarks"
+            android:label="@string/Bookmarks"/>
 
         <meta-data
             android:name="com.google.gms.vision.DEPENDENCIES"
