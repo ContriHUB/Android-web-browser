@@ -5,4 +5,5 @@
 3. [Divyanshi Agrawal](https://github.com/Divyanshi070700)
 4. [Gursimran Kaur Saini](https://github.com/gursimran18)
 5. [Priyanshu Gupta](https://github.com/wsLord)
-6. [Vishwas Vaish](https://github.com/VVV007)
+6. [Abhijeet Pandey](https://github.com/abhijeetp94)
+7. [Vishwas Vaish](https://github.com/VVV007)
