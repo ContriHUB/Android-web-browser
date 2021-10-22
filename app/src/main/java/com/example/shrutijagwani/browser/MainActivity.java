@@ -389,6 +389,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onRefreshPressed() {
+        if (currentWebView == null) return;
         currentWebView.reload();
     }
 
