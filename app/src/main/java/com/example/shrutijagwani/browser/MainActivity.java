@@ -325,7 +325,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void onBookPressed() {
         Websites web = new Websites(currentWebView.getUrl());
-        dbHandlerbook.addUrl(web);
         if (currentWebView.getUrl() == null) {
             return;
         }
