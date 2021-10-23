@@ -77,6 +77,7 @@ public class myDbHandlerBook extends SQLiteOpenHelper {
                 }
             } while (c.moveToNext());
         }
+        c.close();
         return dbstring;
     }
 

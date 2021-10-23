@@ -3,6 +3,7 @@ package com.example.shrutijagwani.browser;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,8 @@ public class bookmarks extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bookmarks);
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) ab.setTitle("Bookmarks");
 
         ListView mylist=(ListView)findViewById(R.id.listViewBook);
         final List<String> books=dbHandlerBook.databaseToString();

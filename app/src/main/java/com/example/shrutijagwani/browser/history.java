@@ -24,8 +24,8 @@ public class history extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_history);
-        //ab=getActionBar();
-       // ab.setTitle("History");
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) ab.setTitle("History");
 
 
 

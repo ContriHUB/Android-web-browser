@@ -10,18 +10,12 @@ import android.net.Uri;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.view.menu.ActionMenuItem;
-import android.support.v7.view.menu.ActionMenuItemView;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.webkit.CookieManager;
 import android.webkit.DownloadListener;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -224,7 +218,7 @@ public class MainActivity extends AppCompatActivity {
         }
         if (currentWebView.getUrl() == null) {
             item.setIcon(R.drawable.ic_bookmark_grey_24dp);
-        } else if (!isBookMark(new Websites(currentWebView.getUrl()))) {
+        } else if (!isValidBookMark(new Websites(currentWebView.getUrl()))) {
             item.setIcon(R.drawable.ic_bookmark_yellow_24dp);
         } else {
             item.setIcon(R.drawable.ic_bookmark_black_24dp);
@@ -331,7 +325,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void onBookPressed() {
         Websites web = new Websites(currentWebView.getUrl());
-        dbHandlerbook.addUrl(web);
         if (currentWebView.getUrl() == null) {
             return;
         }
@@ -343,26 +336,22 @@ public class MainActivity extends AppCompatActivity {
 
         Websites web = new Websites(currentWebView.getUrl());
 
-        if (isBookMark(web)) {
+        if (isValidBookMark(web)) {
             dbHandlerbook.addUrl(web);
         }
 
     }
 
-    private boolean isBookMark(Websites web) {
+    private boolean isValidBookMark(Websites web) {
         books = dbHandlerbook.databaseToString();
         String bookMark = web.get_url();
 
-        int counter = 0;
         for (int i = 0; i < books.size(); i++) {
             if (bookMark.equals(books.get(i))) {
-                counter++;
+                return false;
             }
         }
-        if (counter == 0)
-            return true;
-        else
-            return false;
+        return true;
     }
 
     public void onNewTabPressed() {
@@ -399,6 +388,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void onRefreshPressed() {
+        if (currentWebView == null) return;
         currentWebView.reload();
     }
 
