@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/background">
+    android:background="@drawable/background2">
 
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/mainlayout"
@@ -78,7 +78,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/hi_user_nwhat_about_surfing_stuff"
-        android:textColor="@android:color/white"
+        android:textColor="#888787"
         android:textSize="16sp"
         android:textStyle="bold" />
 
